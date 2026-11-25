@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "nombre": "Cuadro Abstracto Dorado & Mármol",
+    "categoria": "cuadros",
+    "precio": 1850,
+    "temporada": false,
+    "imagen": "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=600&q=80",
+    "descripcion": "Lienzo enmarcado en acabado dorado cepillado, ideal para sala o recibidor."
+  },
+  {
+    "id": 2,
+    "nombre": "Espejo Circular Marco Dorado",
+    "categoria": "espejos",
+    "precio": 2400,
+    "temporada": false,
+    "imagen": "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=600&q=80",
+    "descripcion": "Espejo de 80 cm con marco metálico en tono champagne dorado."
+  },
+  {
+    "id": 3,
+    "nombre": "Mesa Auxiliar de Cristal y Latón",
+    "categoria": "mesas",
+    "precio": 3200,
+    "temporada": false,
+    "imagen": "https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?auto=format&fit=crop&w=600&q=80",
+    "descripcion": "Mesa pequeña con cubierta de cristal templado y base dorada minimalista."
+  },
+  {
+    "id": 4,
+    "nombre": "Figura de Cerámica Orgánica Beige",
+    "categoria": "ceramica",
+    "precio": 680,
+    "temporada": false,
+    "imagen": "https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=600&q=80",
+    "descripcion": "Escultura decorativa de cerámica mate en tono arena, hecha a mano."
+  },
+  {
+    "id": 5,
+    "nombre": "Set de 3 Jarrones Cerámica Minimal",
+    "categoria": "ceramica",
+    "precio": 950,
+    "temporada": false,
+    "imagen": "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=600&q=80",
+    "descripcion": "Trío de piezas en cerámica beige y blanco hueso para centro de mesa."
+  },
+  {
+    "id": 6,
+    "nombre": "Corona Navideña Dorada & Pino",
+    "categoria": "navidad",
+    "precio": 1150,
+    "temporada": true,
+    "imagen": "https://images.unsplash.com/photo-1512389142860-9c449e58a543?auto=format&fit=crop&w=600&q=80",
+    "descripcion": "Corona artesanal de temporada con detalles dorados y bayas invernales."
+  },
+  {
+    "id": 7,
+    "nombre": "Esferas de Cristal y Hoja de Oro (Set x6)",
+    "categoria": "navidad",
+    "precio": 790,
+    "temporada": true,
+    "imagen": "https://images.unsplash.com/photo-1543589077-47d81606c1bf?auto=format&fit=crop&w=600&q=80",
+    "descripcion": "Juego de 6 esferas navideñas elegantes en cristal transparente y dorado."
+  },
+  {
+    "id": 8,
+    "nombre": "Espejo Arco de Cuerpo Completo",
+    "categoria": "espejos",
+    "precio": 4100,
+    "temporada": false,
+    "imagen": "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=600&q=80",
+    "descripcion": "Espejo estilo arco con borde fino dorado, perfecto para recámara o vestidor."
+  }
+]

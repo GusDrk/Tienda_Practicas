@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DecorArte | Decoración Elegante para tu Hogar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <header class="navbar">
+    <div class="container nav-content">
+      <a href="#inicio" class="logo">Decor<span>Arte</span></a>
+      <nav class="nav-links">
+        <a href="#inicio">Inicio</a>
+        <a href="#temporada">Navidad</a>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <button id="open-cart-btn" class="cart-btn" aria-label="Abrir carrito">
+        <span>Carrito</span>
+        <span id="cart-count" class="cart-badge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Principal -->
+  <section id="inicio" class="hero">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <span class="eyebrow">Edición Local · Entrega en la Ciudad</span>
+        <h1>Detalles que transforman tu hogar en arte</h1>
+        <p>
+          Cuadros, espejos, mesas de cristal, piezas de cerámica y decoración de temporada seleccionados con estilo atemporal en blanco, beige y dorado.
+        </p>
+        <div class="hero-actions">
+          <a href="#catalogo" class="btn btn-primary">Explorar Catálogo</a>
+          <a href="#temporada" class="btn btn-outline">Colección Navidad</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card">
+          <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80" alt="Decoración elegante DecorArte" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Banner Temporada Navidad -->
+  <section id="temporada" class="season-section">
+    <div class="container season-box">
+      <div class="season-info">
+        <span class="eyebrow">Temporada Invierno</span>
+        <h2>Colección Navidad</h2>
+        <p>
+          Piezas exclusivas en tonos champagne, cristal y dorado para vestir tu hogar esta temporada navideña. Disponibles para recoger en tienda o envío local.
+        </p>
+        <button class="btn btn-primary" onclick="filtrarPorCategoria('navidad', true)">
+          Ver Artículos de Navidad
+        </button>
+      </div>
+      <div class="season-badge-card">
+        <p class="season-highlight">✦ Edición Limitada</p>
+        <p>Coronas, esferas de cristal y centros de mesa listos para entrega.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Catálogo de Artículos -->
+  <section id="catalogo" class="catalog-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Nuestra Selección</span>
+        <h2>Catálogo de Artículos</h2>
+        <p>Elige tus piezas favoritas y recíbelas a domicilio o recógelas en nuestra tienda.</p>
+      </div>
+
+      <div class="catalog-controls">
+        <div class="filter-buttons" id="filter-buttons">
+          <button class="filter-btn active" data-category="todos">Todos</button>
+          <button class="filter-btn" data-category="cuadros">Cuadros</button>
+          <button class="filter-btn" data-category="espejos">Espejos</button>
+          <button class="filter-btn" data-category="mesas">Mesas de Cristal</button>
+          <button class="filter-btn" data-category="ceramica">Cerámica</button>
+          <button class="filter-btn" data-category="navidad">Navidad</button>
+        </div>
+        <input type="search" id="search-input" class="search-input" placeholder="Buscar artículo..." />
+      </div>
+
+      <div id="catalog-grid" class="catalog-grid">
+        <!-- Se renderiza dinámicamente desde js/app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Modalidades de Venta y Pago -->
+  <section class="info-strip">
+    <div class="container info-grid">
+      <div class="info-card">
+        <h3>1. Recoger en Tienda</h3>
+        <p>Compra en línea, aparta tus artículos y pasa a recogerlos directamente en nuestra sucursal sin costo de envío.</p>
+      </div>
+      <div class="info-card">
+        <h3>2. Entrega a Domicilio</h3>
+        <p>Enviamos dentro de la ciudad. Solo indícanos tu dirección y un número telefónico para coordinar la entrega.</p>
+      </div>
+      <div class="info-card">
+        <h3>3. Pagos con Mercado Pago</h3>
+        <p>Aceptamos pago con terminales Point de Mercado Pago en tienda/entrega o mediante enlace de pago en línea.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section id="contacto" class="contact-section">
+    <div class="container contact-box">
+      <div>
+        <span class="eyebrow">Atención Personalizada</span>
+        <h2>Comunícate con DecorArte</h2>
+        <p>¿Tienes dudas sobre medidas, disponibilidad o envíos en la ciudad? Contáctanos directamente.</p>
+      </div>
+      <div class="contact-details">
+        <div class="contact-item">
+          <span class="contact-label">Teléfono / WhatsApp de la Tienda</span>
+          <a href="tel:+520000000000" class="contact-phone">+52 (000) 000-0000</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Horario de Atención</span>
+          <p>Lunes a Sábado · 10:00 AM – 7:00 PM</p>
+        </div>
+        <a href="https://wa.me/520000000000?text=Hola%20DecorArte,%20quisiera%20informaci%C3%B3n%20sobre%20un%20art%C3%ADculo." target="_blank" rel="noopener" class="btn btn-primary">
+          Enviar WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <p class="logo">Decor<span>Arte</span></p>
+      <p class="footer-note">© 2026 DecorArte. Venta local en la ciudad · Pagos con Mercado Pago.</p>
+    </div>
+  </footer>
+
+  <!-- Drawer Carrito & Checkout -->
+  <div id="cart-overlay" class="cart-overlay hidden"></div>
+  <aside id="cart-drawer" class="cart-drawer hidden" aria-label="Carrito de compras">
+    <div class="drawer-header">
+      <h3>Tu Pedido</h3>
+      <button id="close-cart-btn" class="close-btn" aria-label="Cerrar carrito">&times;</button>
+    </div>
+
+    <div id="cart-items" class="cart-items">
+      <!-- Items del carrito -->
+    </div>
+
+    <div class="drawer-footer">
+      <div class="total-row">
+        <span>Total:</span>
+        <strong id="cart-total">$0.00 MXN</strong>
+      </div>
+
+      <form id="checkout-form" class="checkout-form">
+        <h4>Datos del Cliente</h4>
+
+        <label class="field-label">
+          Nombre completo *
+          <input type="text" id="cliente-nombre" required placeholder="Ej. Sofía Martínez" />
+        </label>
+
+        <label class="field-label">
+          Teléfono de contacto (para comunicarnos contigo) *
+          <input type="tel" id="cliente-telefono" required placeholder="Ej. 55 1234 5678" />
+        </label>
+
+        <div class="delivery-toggle">
+          <span class="field-label">Forma de entrega *</span>
+          <div class="radio-group">
+            <label class="radio-card">
+              <input type="radio" name="tipo_entrega" value="tienda" checked />
+              <span>Recoger en tienda</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="tipo_entrega" value="domicilio" />
+              <span>Entrega a domicilio</span>
+            </label>
+          </div>
+        </div>
+
+        <div id="domicilio-fields" class="domicilio-fields hidden">
+          <label class="field-label">
+            Dirección (Calle, número y colonia) *
+            <input type="text" id="cliente-direccion" placeholder="Ej. Av. Reforma 123, Col. Centro" />
+          </label>
+          <label class="field-label">
+            Referencias de entrega
+            <input type="text" id="cliente-referencias" placeholder="Ej. Portón blanco, frente al parque" />
+          </label>
+        </div>
+
+        <div class="payment-method">
+          <span class="field-label">Método de pago (Mercado Pago) *</span>
+          <select id="metodo-pago" required>
+            <option value="mercadopago_terminal">Terminal Mercado Pago (en tienda / contra entrega)</option>
+            <option value="mercadopago_online">Pago en línea con Mercado Pago</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Confirmar Pedido</button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- Modal Confirmación -->
+  <div id="order-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="eyebrow">Pedido Registrado</span>
+      <h3>¡Gracias por tu compra en DecorArte!</h3>
+      <div id="order-summary" class="order-summary"></div>
+      <div class="modal-actions">
+        <a id="whatsapp-order-link" href="#" target="_blank" rel="noopener" class="btn btn-primary">Enviar resumen por WhatsApp</a>
+        <button id="close-modal-btn" class="btn btn-outline">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
