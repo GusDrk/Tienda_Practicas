@@ -1,0 +1,46 @@
+[
+  {
+    "slug": "cuadros",
+    "nombre": "Cuadros",
+    "habilitado": true,
+    "es_temporada": false,
+    "subcategorias": []
+  },
+  {
+    "slug": "espejos",
+    "nombre": "Espejos",
+    "habilitado": true,
+    "es_temporada": false,
+    "subcategorias": []
+  },
+  {
+    "slug": "mesas",
+    "nombre": "Mesas de Cristal",
+    "habilitado": true,
+    "es_temporada": false,
+    "subcategorias": []
+  },
+  {
+    "slug": "ceramica",
+    "nombre": "Cerámica",
+    "habilitado": true,
+    "es_temporada": false,
+    "subcategorias": []
+  },
+  {
+    "slug": "navidad",
+    "nombre": "Navidad",
+    "habilitado": true,
+    "es_temporada": true,
+    "subcategorias": [
+      "Árboles artificiales",
+      "Follaje",
+      "Nochebuenas",
+      "Esferas",
+      "Villas navideñas",
+      "Coronas de encino",
+      "Peluches",
+      "Elementos navideños"
+    ]
+  }
+]

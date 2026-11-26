@@ -1,88 +1,25 @@
-const TELEFONO_TIENDA = "520000000000"; // Reemplazar con el número real de DecorArte
+const TELEFONO_TIENDA = "527716702732";
 
-const PRODUCTOS_FALLBACK = [
-  {
-    id: 1,
-    nombre: "Cuadro Abstracto Dorado & Mármol",
-    categoria: "cuadros",
-    precio: 1850,
-    temporada: false,
-    imagen: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=600&q=80",
-    descripcion: "Lienzo enmarcado en acabado dorado cepillado, ideal para sala o recibidor."
-  },
-  {
-    id: 2,
-    nombre: "Espejo Circular Marco Dorado",
-    categoria: "espejos",
-    precio: 2400,
-    temporada: false,
-    imagen: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=600&q=80",
-    descripcion: "Espejo de 80 cm con marco metálico en tono champagne dorado."
-  },
-  {
-    id: 3,
-    nombre: "Mesa Auxiliar de Cristal y Latón",
-    categoria: "mesas",
-    precio: 3200,
-    temporada: false,
-    imagen: "https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?auto=format&fit=crop&w=600&q=80",
-    descripcion: "Mesa pequeña con cubierta de cristal templado y base dorada minimalista."
-  },
-  {
-    id: 4,
-    nombre: "Figura de Cerámica Orgánica Beige",
-    categoria: "ceramica",
-    precio: 680,
-    temporada: false,
-    imagen: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=600&q=80",
-    descripcion: "Escultura decorativa de cerámica mate en tono arena, hecha a mano."
-  },
-  {
-    id: 5,
-    nombre: "Set de 3 Jarrones Cerámica Minimal",
-    categoria: "ceramica",
-    precio: 950,
-    temporada: false,
-    imagen: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=600&q=80",
-    descripcion: "Trío de piezas en cerámica beige y blanco hueso para centro de mesa."
-  },
-  {
-    id: 6,
-    nombre: "Corona Navideña Dorada & Pino",
-    categoria: "navidad",
-    precio: 1150,
-    temporada: true,
-    imagen: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?auto=format&fit=crop&w=600&q=80",
-    descripcion: "Corona artesanal de temporada con detalles dorados y bayas invernales."
-  },
-  {
-    id: 7,
-    nombre: "Esferas de Cristal y Hoja de Oro (Set x6)",
-    categoria: "navidad",
-    precio: 790,
-    temporada: true,
-    imagen: "https://images.unsplash.com/photo-1543589077-47d81606c1bf?auto=format&fit=crop&w=600&q=80",
-    descripcion: "Juego de 6 esferas navideñas elegantes en cristal transparente y dorado."
-  },
-  {
-    id: 8,
-    nombre: "Espejo Arco de Cuerpo Completo",
-    categoria: "espejos",
-    precio: 4100,
-    temporada: false,
-    imagen: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=600&q=80",
-    descripcion: "Espejo estilo arco con borde fino dorado, perfecto para recámara o vestidor."
-  }
-];
+const CATALOGOS_KEY = "decorarte_catalogos";
+const PRODUCTOS_KEY = "decorarte_productos";
+const CARRITO_KEY = "decorarte_carrito";
 
+let catalogos = [];
 let productos = [];
 let categoriaActual = "todos";
+let subcategoriaActual = "todas";
 let textoBusqueda = "";
-let carrito = JSON.parse(localStorage.getItem("decorarte_carrito") || "[]");
+let carrito = JSON.parse(localStorage.getItem(CARRITO_KEY) || "[]");
 
 const catalogGrid = document.getElementById("catalog-grid");
+const offersGrid = document.getElementById("offers-grid");
 const searchInput = document.getElementById("search-input");
-const filterButtons = document.querySelectorAll(".filter-btn");
+const filterButtonsContainer = document.getElementById("filter-buttons");
+const subcategoryBar = document.getElementById("subcategory-bar");
+const navidadSection = document.getElementById("temporada");
+const navNavidadLink = document.getElementById("nav-navidad-link");
+const navidadSubcatsContainer = document.getElementById("navidad-subcats");
+
 const cartCount = document.getElementById("cart-count");
 const cartDrawer = document.getElementById("cart-drawer");
 const cartOverlay = document.getElementById("cart-overlay");
@@ -95,28 +32,168 @@ const orderModal = document.getElementById("order-modal");
 const orderSummaryEl = document.getElementById("order-summary");
 const whatsappOrderLink = document.getElementById("whatsapp-order-link");
 
-async function cargarProductos() {
-  try {
-    const res = await fetch("data/productos.json");
-    if (!res.ok) throw new Error("No se pudo cargar JSON");
-    productos = await res.json();
-  } catch {
-    productos = PRODUCTOS_FALLBACK;
+async function cargarDatos() {
+  const catGuardados = localStorage.getItem(CATALOGOS_KEY);
+  const prodGuardados = localStorage.getItem(PRODUCTOS_KEY);
+
+  if (catGuardados) {
+    catalogos = JSON.parse(catGuardados);
+  } else {
+    try {
+      const res = await fetch("data/catalogos.json");
+      catalogos = await res.json();
+    } catch {
+      catalogos = [];
+    }
   }
-  renderCatalogo();
+
+  if (prodGuardados) {
+    productos = JSON.parse(prodGuardados);
+  } else {
+    try {
+      const res = await fetch("data/productos.json");
+      productos = await res.json();
+    } catch {
+      productos = [];
+    }
+  }
+
+  inicializarVista();
+}
+
+function catalogosHabilitados() {
+  return catalogos.filter((c) => c.habilitado !== false);
+}
+
+function esCategoriaHabilitada(slug) {
+  return catalogosHabilitados().some((c) => c.slug === slug);
 }
 
 function formatearPrecio(monto) {
-  return `$${monto.toLocaleString("es-MX", { minimumFractionDigits: 2 })} MXN`;
+  return `$${Number(monto).toLocaleString("es-MX", { minimumFractionDigits: 2 })} MXN`;
+}
+
+function inicializarVista() {
+  const navidadCat = catalogos.find((c) => c.slug === "navidad");
+  const navidadActiva = navidadCat && navidadCat.habilitado !== false;
+
+  navidadSection.classList.toggle("hidden", !navidadActiva);
+  if (navNavidadLink) navNavidadLink.classList.toggle("hidden", !navidadActiva);
+
+  if (navidadActiva && navidadCat.subcategorias?.length) {
+    navidadSubcatsContainer.innerHTML = navidadCat.subcategorias
+      .map(
+        (sub) =>
+          `<button class="subcat-pill" onclick="filtrarNavidadSubcat('${sub.replace(/'/g, "\\'")}')">${sub}</button>`
+      )
+      .join("");
+  }
+
+  renderBotonesFiltro();
+  renderOfertas();
+  renderCatalogo();
+}
+
+function renderBotonesFiltro() {
+  const habilitados = catalogosHabilitados();
+  const botones = [
+    `<button class="filter-btn ${categoriaActual === "todos" ? "active" : ""}" data-category="todos">Todos</button>`,
+    `<button class="filter-btn ${categoriaActual === "ofertas" ? "active" : ""}" data-category="ofertas">Ofertas</button>`,
+    ...habilitados.map(
+      (c) =>
+        `<button class="filter-btn ${categoriaActual === c.slug ? "active" : ""}" data-category="${c.slug}">${c.nombre}</button>`
+    ),
+  ];
+
+  filterButtonsContainer.innerHTML = botones.join("");
+  filterButtonsContainer.querySelectorAll(".filter-btn").forEach((btn) => {
+    btn.addEventListener("click", () => filtrarPorCategoria(btn.dataset.category));
+  });
+}
+
+function renderSubcategoriasBar() {
+  const catObj = catalogosHabilitados().find((c) => c.slug === categoriaActual);
+  if (!catObj || !catObj.subcategorias || catObj.subcategorias.length === 0) {
+    subcategoryBar.classList.add("hidden");
+    subcategoryBar.innerHTML = "";
+    return;
+  }
+
+  subcategoryBar.classList.remove("hidden");
+  const pills = [
+    `<span class="subcategory-bar-label">Catálogo interno de ${catObj.nombre}:</span>`,
+    `<button class="subcat-pill ${subcategoriaActual === "todas" ? "active" : ""}" onclick="seleccionarSubcategoria('todas')">Todo</button>`,
+    ...catObj.subcategorias.map(
+      (sub) =>
+        `<button class="subcat-pill ${subcategoriaActual === sub ? "active" : ""}" onclick="seleccionarSubcategoria('${sub.replace(/'/g, "\\'")}')">${sub}</button>`
+    ),
+  ];
+  subcategoryBar.innerHTML = pills.join("");
+}
+
+function crearTarjetaProducto(p) {
+  const agotado = Number(p.cantidad) <= 0;
+  return `
+    <article class="product-card">
+      <div class="product-img-wrap">
+        <img src="${p.imagen}" alt="${p.nombre}" loading="lazy" />
+        <div class="tag-stack">
+          ${p.en_oferta ? '<span class="offer-tag">Oferta</span>' : ""}
+          ${p.temporada ? '<span class="season-tag">Temporada</span>' : ""}
+        </div>
+      </div>
+      <div class="product-body">
+        <div class="product-meta">
+          <span class="product-cat">${p.subcategoria || p.categoria}</span>
+          <span class="product-sku">${p.codigo || ""}</span>
+        </div>
+        <h3>${p.nombre}</h3>
+        <p class="product-desc">${p.descripcion}</p>
+        <p class="product-stock">${agotado ? "Agotado" : `Disponibles: ${p.cantidad}`}</p>
+        <div class="product-footer">
+          <div class="price-box">
+            ${p.en_oferta && p.precio_anterior ? `<span class="price-old">${formatearPrecio(p.precio_anterior)}</span>` : ""}
+            <span class="product-price">${formatearPrecio(p.precio)}</span>
+          </div>
+          <button class="add-btn" onclick="agregarAlCarrito(${p.id})" ${agotado ? "disabled" : ""}>
+            ${agotado ? "Sin stock" : "Agregar"}
+          </button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderOfertas() {
+  const enOferta = productos.filter(
+    (p) => p.en_oferta && esCategoriaHabilitada(p.categoria)
+  );
+  if (enOferta.length === 0) {
+    offersGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--texto-suave);">Por el momento no hay ofertas activas.</p>`;
+    return;
+  }
+  offersGrid.innerHTML = enOferta.map(crearTarjetaProducto).join("");
 }
 
 function renderCatalogo() {
+  renderSubcategoriasBar();
+
   const filtrados = productos.filter((p) => {
-    const coincideCat = categoriaActual === "todos" || p.categoria === categoriaActual;
+    if (!esCategoriaHabilitada(p.categoria)) return false;
+
+    const coincideCat =
+      categoriaActual === "todos" ||
+      (categoriaActual === "ofertas" ? p.en_oferta : p.categoria === categoriaActual);
+
+    const coincideSub =
+      subcategoriaActual === "todas" || p.subcategoria === subcategoriaActual;
+
     const coincideTexto =
       p.nombre.toLowerCase().includes(textoBusqueda) ||
-      p.descripcion.toLowerCase().includes(textoBusqueda);
-    return coincideCat && coincideTexto;
+      p.descripcion.toLowerCase().includes(textoBusqueda) ||
+      (p.codigo || "").toLowerCase().includes(textoBusqueda);
+
+    return coincideCat && coincideSub && coincideTexto;
   });
 
   if (filtrados.length === 0) {
@@ -124,43 +201,31 @@ function renderCatalogo() {
     return;
   }
 
-  catalogGrid.innerHTML = filtrados
-    .map(
-      (p) => `
-      <article class="product-card">
-        <div class="product-img-wrap">
-          <img src="${p.imagen}" alt="${p.nombre}" loading="lazy" />
-          ${p.temporada ? '<span class="season-tag">Navidad</span>' : ""}
-        </div>
-        <div class="product-body">
-          <span class="product-cat">${p.categoria}</span>
-          <h3>${p.nombre}</h3>
-          <p class="product-desc">${p.descripcion}</p>
-          <div class="product-footer">
-            <span class="product-price">${formatearPrecio(p.precio)}</span>
-            <button class="add-btn" onclick="agregarAlCarrito(${p.id})">Agregar</button>
-          </div>
-        </div>
-      </article>
-    `
-    )
-    .join("");
+  catalogGrid.innerHTML = filtrados.map(crearTarjetaProducto).join("");
 }
 
 function filtrarPorCategoria(cat, hacerScroll = false) {
   categoriaActual = cat;
-  filterButtons.forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.category === cat);
-  });
+  subcategoriaActual = "todas";
+  renderBotonesFiltro();
   renderCatalogo();
   if (hacerScroll) {
     document.getElementById("catalogo").scrollIntoView({ behavior: "smooth" });
   }
 }
 
-filterButtons.forEach((btn) => {
-  btn.addEventListener("click", () => filtrarPorCategoria(btn.dataset.category));
-});
+function seleccionarSubcategoria(sub) {
+  subcategoriaActual = sub;
+  renderCatalogo();
+}
+
+function filtrarNavidadSubcat(sub) {
+  categoriaActual = "navidad";
+  subcategoriaActual = sub;
+  renderBotonesFiltro();
+  renderCatalogo();
+  document.getElementById("catalogo").scrollIntoView({ behavior: "smooth" });
+}
 
 searchInput.addEventListener("input", (e) => {
   textoBusqueda = e.target.value.trim().toLowerCase();
@@ -168,14 +233,18 @@ searchInput.addEventListener("input", (e) => {
 });
 
 function guardarCarrito() {
-  localStorage.setItem("decorarte_carrito", JSON.stringify(carrito));
+  localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
 }
 
 function agregarAlCarrito(id) {
   const prod = productos.find((p) => p.id === id);
-  if (!prod) return;
+  if (!prod || Number(prod.cantidad) <= 0) return;
   const existente = carrito.find((item) => item.id === id);
   if (existente) {
+    if (existente.cantidad >= prod.cantidad) {
+      alert("Has alcanzado la cantidad máxima disponible de este artículo.");
+      return;
+    }
     existente.cantidad += 1;
   } else {
     carrito.push({ ...prod, cantidad: 1 });
@@ -267,7 +336,7 @@ checkoutForm.addEventListener("submit", (e) => {
 
   const total = carrito.reduce((acc, i) => acc + i.precio * i.cantidad, 0);
   const listaProductos = carrito
-    .map((i) => `• ${i.cantidad}x ${i.nombre} (${formatearPrecio(i.precio * i.cantidad)})`)
+    .map((i) => `• ${i.cantidad}x [${i.codigo || i.id}] ${i.nombre} (${formatearPrecio(i.precio * i.cantidad)})`)
     .join("\n");
 
   const textoEntrega =
@@ -301,5 +370,5 @@ document.getElementById("close-modal-btn").addEventListener("click", () => {
   orderModal.classList.add("hidden");
 });
 
-cargarProductos();
+cargarDatos();
 renderCarrito();

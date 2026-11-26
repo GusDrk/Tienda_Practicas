@@ -16,7 +16,8 @@
       <a href="#inicio" class="logo">Decor<span>Arte</span></a>
       <nav class="nav-links">
         <a href="#inicio">Inicio</a>
-        <a href="#temporada">Navidad</a>
+        <a href="#ofertas">Ofertas</a>
+        <a href="#temporada" id="nav-navidad-link">Navidad</a>
         <a href="#catalogo">Catálogo</a>
         <a href="#contacto">Contacto</a>
       </nav>
@@ -38,7 +39,7 @@
         </p>
         <div class="hero-actions">
           <a href="#catalogo" class="btn btn-primary">Explorar Catálogo</a>
-          <a href="#temporada" class="btn btn-outline">Colección Navidad</a>
+          <a href="#ofertas" class="btn btn-outline">Ver Ofertas</a>
         </div>
       </div>
       <div class="hero-visual">
@@ -49,22 +50,39 @@
     </div>
   </section>
 
-  <!-- Banner Temporada Navidad -->
+  <!-- Apartado de Ofertas -->
+  <section id="ofertas" class="offers-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Precios Especiales</span>
+        <h2>Ofertas de Temporada</h2>
+        <p>Piezas seleccionadas con descuento especial por tiempo limitado.</p>
+      </div>
+      <div id="offers-grid" class="catalog-grid">
+        <!-- Se renderiza dinámicamente desde js/app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Banner Temporada Navidad (se oculta si se deshabilita desde Admin) -->
   <section id="temporada" class="season-section">
     <div class="container season-box">
       <div class="season-info">
-        <span class="eyebrow">Temporada Invierno</span>
+        <span class="eyebrow">Temporada Navideña</span>
         <h2>Colección Navidad</h2>
         <p>
-          Piezas exclusivas en tonos champagne, cristal y dorado para vestir tu hogar esta temporada navideña. Disponibles para recoger en tienda o envío local.
+          Adornos y figuras navideñas de gran variedad para vestir tu hogar esta temporada. Disponibles para recoger en tienda o entrega a domicilio.
         </p>
+        <div id="navidad-subcats" class="subcat-pills">
+          <!-- Subcategorías internas de Navidad -->
+        </div>
         <button class="btn btn-primary" onclick="filtrarPorCategoria('navidad', true)">
-          Ver Artículos de Navidad
+          Explorar Todo Navidad
         </button>
       </div>
       <div class="season-badge-card">
-        <p class="season-highlight">✦ Edición Limitada</p>
-        <p>Coronas, esferas de cristal y centros de mesa listos para entrega.</p>
+        <p class="season-highlight">✦ Catálogo Interno Navideño</p>
+        <p>Árboles artificiales, follaje, nochebuenas, esferas, villas navideñas, coronas de encino, peluches y más.</p>
       </div>
     </div>
   </section>
@@ -80,14 +98,13 @@
 
       <div class="catalog-controls">
         <div class="filter-buttons" id="filter-buttons">
-          <button class="filter-btn active" data-category="todos">Todos</button>
-          <button class="filter-btn" data-category="cuadros">Cuadros</button>
-          <button class="filter-btn" data-category="espejos">Espejos</button>
-          <button class="filter-btn" data-category="mesas">Mesas de Cristal</button>
-          <button class="filter-btn" data-category="ceramica">Cerámica</button>
-          <button class="filter-btn" data-category="navidad">Navidad</button>
+          <!-- Botones dinámicos según catálogos habilitados -->
         </div>
-        <input type="search" id="search-input" class="search-input" placeholder="Buscar artículo..." />
+        <input type="search" id="search-input" class="search-input" placeholder="Buscar por nombre o código..." />
+      </div>
+
+      <div id="subcategory-bar" class="subcategory-bar hidden">
+        <!-- Subcategorías del catálogo activo (ej. Navidad) -->
       </div>
 
       <div id="catalog-grid" class="catalog-grid">
@@ -125,13 +142,13 @@
       <div class="contact-details">
         <div class="contact-item">
           <span class="contact-label">Teléfono / WhatsApp de la Tienda</span>
-          <a href="tel:+520000000000" class="contact-phone">+52 (000) 000-0000</a>
+          <a href="tel:+527716702732" class="contact-phone">771 670 2732</a>
         </div>
         <div class="contact-item">
           <span class="contact-label">Horario de Atención</span>
-          <p>Lunes a Sábado · 10:00 AM – 7:00 PM</p>
+          <p>Lunes a Domingo · 8:30 AM – 9:00 PM</p>
         </div>
-        <a href="https://wa.me/520000000000?text=Hola%20DecorArte,%20quisiera%20informaci%C3%B3n%20sobre%20un%20art%C3%ADculo." target="_blank" rel="noopener" class="btn btn-primary">
+        <a href="https://wa.me/527716702732?text=Hola%20DecorArte,%20quisiera%20informaci%C3%B3n%20sobre%20un%20art%C3%ADculo." target="_blank" rel="noopener" class="btn btn-primary">
           Enviar WhatsApp
         </a>
       </div>
@@ -142,7 +159,10 @@
   <footer class="footer">
     <div class="container footer-content">
       <p class="logo">Decor<span>Arte</span></p>
-      <p class="footer-note">© 2026 DecorArte. Venta local en la ciudad · Pagos con Mercado Pago.</p>
+      <p class="footer-note">
+        © 2026 DecorArte · Tel: 771 670 2732 ·
+        <a href="admin.html" class="admin-link">Administración</a>
+      </p>
     </div>
   </footer>
 
@@ -174,7 +194,7 @@
 
         <label class="field-label">
           Teléfono de contacto (para comunicarnos contigo) *
-          <input type="tel" id="cliente-telefono" required placeholder="Ej. 55 1234 5678" />
+          <input type="tel" id="cliente-telefono" required placeholder="Ej. 771 123 4567" />
         </label>
 
         <div class="delivery-toggle">

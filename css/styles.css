@@ -8,6 +8,7 @@
   --texto: #2c2623;
   --texto-suave: #6e655f;
   --borde: #e8dfd1;
+  --oferta: #9e3b33;
   --sombra: 0 10px 30px rgba(44, 38, 35, 0.06);
   --radio: 10px;
 }
@@ -80,7 +81,7 @@ h1, h2, h3, h4, .logo {
 
 .nav-links {
   display: flex;
-  gap: 1.8rem;
+  gap: 1.6rem;
 }
 
 .nav-links a {
@@ -157,6 +158,16 @@ h1, h2, h3, h4, .logo {
   background: var(--beige);
 }
 
+.btn-danger {
+  background: #b84a42;
+  color: var(--blanco);
+}
+
+.btn-sm {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.78rem;
+}
+
 .btn-full {
   width: 100%;
   text-align: center;
@@ -211,9 +222,14 @@ h1, h2, h3, h4, .logo {
   display: block;
 }
 
+/* Ofertas */
+.offers-section {
+  padding: 3.5rem 0 2rem;
+}
+
 /* Temporada Navidad */
 .season-section {
-  padding: 3.5rem 0;
+  padding: 2.5rem 0;
 }
 
 .season-box {
@@ -235,8 +251,34 @@ h1, h2, h3, h4, .logo {
 
 .season-info p {
   color: var(--texto-suave);
-  max-width: 580px;
+  max-width: 600px;
+  margin-bottom: 1.2rem;
+}
+
+.subcat-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
   margin-bottom: 1.4rem;
+}
+
+.subcat-pill {
+  background: var(--beige);
+  border: 1px solid var(--borde);
+  color: var(--texto);
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.subcat-pill:hover,
+.subcat-pill.active {
+  background: var(--dorado);
+  border-color: var(--dorado);
+  color: var(--blanco);
 }
 
 .season-badge-card {
@@ -244,7 +286,7 @@ h1, h2, h3, h4, .logo {
   border: 1px solid var(--beige-oscuro);
   padding: 1.5rem;
   border-radius: var(--radio);
-  max-width: 280px;
+  max-width: 290px;
   text-align: center;
 }
 
@@ -279,7 +321,7 @@ h1, h2, h3, h4, .logo {
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.2rem;
 }
 
 .filter-buttons {
@@ -307,6 +349,25 @@ h1, h2, h3, h4, .logo {
   color: var(--blanco);
 }
 
+.subcategory-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  margin-bottom: 1.8rem;
+}
+
+.subcategory-bar-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--dorado-oscuro);
+  margin-right: 0.3rem;
+}
+
 .search-input {
   padding: 0.55rem 1rem;
   border: 1px solid var(--borde);
@@ -314,7 +375,7 @@ h1, h2, h3, h4, .logo {
   background: var(--blanco);
   font-family: inherit;
   font-size: 0.85rem;
-  min-width: 220px;
+  min-width: 240px;
 }
 
 .catalog-grid {
@@ -351,18 +412,29 @@ h1, h2, h3, h4, .logo {
   display: block;
 }
 
-.season-tag {
+.tag-stack {
   position: absolute;
   top: 10px;
   left: 10px;
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.season-tag,
+.offer-tag {
   background: var(--dorado);
   color: var(--blanco);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  padding: 0.25rem 0.65rem;
+  padding: 0.22rem 0.6rem;
   border-radius: 999px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
+}
+
+.offer-tag {
+  background: var(--oferta);
 }
 
 .product-body {
@@ -372,24 +444,42 @@ h1, h2, h3, h4, .logo {
   flex: 1;
 }
 
-.product-cat {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: var(--dorado-oscuro);
+.product-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
   margin-bottom: 0.3rem;
 }
 
+.product-cat {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--dorado-oscuro);
+}
+
+.product-sku {
+  font-size: 0.7rem;
+  color: var(--texto-suave);
+}
+
 .product-body h3 {
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   margin-bottom: 0.4rem;
 }
 
 .product-desc {
-  font-size: 0.84rem;
+  font-size: 0.83rem;
   color: var(--texto-suave);
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   flex: 1;
+}
+
+.product-stock {
+  font-size: 0.75rem;
+  color: var(--texto-suave);
+  margin-bottom: 0.6rem;
 }
 
 .product-footer {
@@ -399,6 +489,17 @@ h1, h2, h3, h4, .logo {
   gap: 0.5rem;
   padding-top: 0.8rem;
   border-top: 1px solid var(--borde);
+}
+
+.price-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-old {
+  font-size: 0.76rem;
+  color: var(--texto-suave);
+  text-decoration: line-through;
 }
 
 .product-price {
@@ -419,9 +520,14 @@ h1, h2, h3, h4, .logo {
   transition: all 0.2s;
 }
 
-.add-btn:hover {
+.add-btn:hover:not(:disabled) {
   background: var(--dorado);
   color: var(--blanco);
+}
+
+.add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Info Strip */
@@ -518,6 +624,16 @@ h1, h2, h3, h4, .logo {
 .footer-note {
   font-size: 0.82rem;
   color: var(--texto-suave);
+}
+
+.admin-link {
+  color: var(--dorado-oscuro);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.admin-link:hover {
+  text-decoration: underline;
 }
 
 /* Drawer Carrito */
@@ -633,6 +749,8 @@ h1, h2, h3, h4, .logo {
 }
 
 .field-label input,
+.field-label textarea,
+.field-label select,
 .payment-method select {
   width: 100%;
   margin-top: 0.3rem;
@@ -709,6 +827,90 @@ h1, h2, h3, h4, .logo {
   display: flex;
   gap: 0.8rem;
   flex-wrap: wrap;
+}
+
+/* Panel Admin */
+.admin-main {
+  padding: 2.5rem 0 4rem;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.admin-card {
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 1.6rem;
+  box-shadow: var(--sombra);
+  margin-bottom: 1.5rem;
+}
+
+.admin-card h2,
+.admin-card h3 {
+  margin-bottom: 1rem;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid var(--borde);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.admin-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--borde);
+}
+
+.catalog-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--borde);
+  gap: 0.5rem;
+}
+
+.status-pill {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.status-on {
+  background: #e3f2e6;
+  color: #216e39;
+}
+
+.status-off {
+  background: #f8e3e2;
+  color: #9e3b33;
+}
+
+@media (max-width: 900px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 768px) {

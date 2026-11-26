@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DecorArte | Administración de Tienda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav-content">
+      <a href="index.html" class="logo">Decor<span>Arte</span> · Admin</a>
+      <div style="display:flex;gap:0.8rem;align-items:center;">
+        <a href="index.html" class="btn btn-outline btn-sm">Ver Tienda</a>
+        <button id="logout-btn" class="btn btn-outline btn-sm hidden">Cerrar Sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Pantalla de acceso -->
+  <section id="admin-login" class="container" style="max-width:420px;margin:4rem auto;">
+    <div class="admin-card">
+      <span class="eyebrow">Panel Privado</span>
+      <h2>Acceso de Administración</h2>
+      <p style="font-size:0.84rem;color:var(--texto-suave);margin-bottom:1rem;">
+        Ingresa la clave de administrador (por defecto: <strong>decorarte2026</strong>).
+      </p>
+      <form id="login-form">
+        <label class="field-label">
+          Contraseña
+          <input type="password" id="admin-pass" required placeholder="Ingresa la clave" />
+        </label>
+        <button type="submit" class="btn btn-primary btn-full">Entrar al Panel</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Panel principal -->
+  <main id="admin-panel" class="container admin-main hidden">
+    <div class="admin-grid">
+      <!-- Columna izquierda: Formularios -->
+      <div>
+        <!-- Alta / Edición de Producto -->
+        <div class="admin-card">
+          <span class="eyebrow">Inventario</span>
+          <h2 id="product-form-title">Dar de Alta Producto</h2>
+          <form id="product-form">
+            <input type="hidden" id="prod-id" />
+
+            <label class="field-label">
+              Código del producto (SKU) *
+              <input type="text" id="prod-codigo" required placeholder="Ej. DA-NAV-009" />
+            </label>
+
+            <label class="field-label">
+              Nombre del producto *
+              <input type="text" id="prod-nombre" required placeholder="Ej. Espejo Dorado Ovalado" />
+            </label>
+
+            <label class="field-label">
+              Descripción del producto *
+              <textarea id="prod-descripcion" rows="2" required placeholder="Descripción breve y elegante..."></textarea>
+            </label>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+              <label class="field-label">
+                Catálogo *
+                <select id="prod-categoria" required></select>
+              </label>
+              <label class="field-label">
+                Subcategoría (opcional)
+                <input type="text" id="prod-subcategoria" list="subcat-suggestions" placeholder="Ej. Esferas, Villas..." />
+                <datalist id="subcat-suggestions"></datalist>
+              </label>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;">
+              <label class="field-label">
+                Precio (MXN) *
+                <input type="number" id="prod-precio" min="1" step="0.01" required />
+              </label>
+              <label class="field-label">
+                Precio anterior
+                <input type="number" id="prod-precio-anterior" min="0" step="0.01" placeholder="Opcional" />
+              </label>
+              <label class="field-label">
+                Cantidad (Stock) *
+                <input type="number" id="prod-cantidad" min="0" required />
+              </label>
+            </div>
+
+            <label class="field-label" style="display:flex;align-items:center;gap:0.5rem;">
+              <input type="checkbox" id="prod-oferta" style="width:auto;margin:0;" />
+              <span>Mostrar en apartado de Ofertas</span>
+            </label>
+
+            <label class="field-label">
+              URL de la imagen
+              <input type="url" id="prod-imagen-url" placeholder="https://..." />
+            </label>
+
+            <label class="field-label">
+              O subir imagen desde tu equipo
+              <input type="file" id="prod-imagen-file" accept="image/*" />
+            </label>
+
+            <div id="img-preview-wrap" class="hidden" style="margin-bottom:0.8rem;">
+              <img id="img-preview" class="admin-thumb" style="width:90px;height:90px;" alt="Vista previa" />
+            </div>
+
+            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+              <button type="submit" class="btn btn-primary">Guardar Producto</button>
+              <button type="button" id="cancel-edit-btn" class="btn btn-outline hidden">Cancelar Edición</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Gestión de Catálogos -->
+        <div class="admin-card">
+          <span class="eyebrow">Temporadas y Secciones</span>
+          <h3>Administrar Catálogos</h3>
+          <form id="catalog-form" style="margin-bottom:1.2rem;">
+            <label class="field-label">
+              Nuevo catálogo *
+              <input type="text" id="cat-nombre" required placeholder="Ej. San Valentín, Primavera..." />
+            </label>
+            <label class="field-label">
+              Subcategorías internas (separadas por coma, opcional)
+              <input type="text" id="cat-subcats" placeholder="Ej. Velas, Corazones, Centros de mesa" />
+            </label>
+            <label class="field-label" style="display:flex;align-items:center;gap:0.5rem;">
+              <input type="checkbox" id="cat-temporada" style="width:auto;margin:0;" />
+              <span>Es catálogo de temporada</span>
+            </label>
+            <button type="submit" class="btn btn-primary btn-sm">Crear Catálogo</button>
+          </form>
+
+          <div id="catalogs-list">
+            <!-- Lista de catálogos para habilitar / deshabilitar -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna derecha: Tabla de Productos y Respaldo -->
+      <div>
+        <div class="admin-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.8rem;margin-bottom:1rem;">
+            <div>
+              <span class="eyebrow">Base de Datos Local</span>
+              <h2 style="margin:0;">Productos Registrados</h2>
+            </div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <button id="export-prod-btn" class="btn btn-outline btn-sm">Descargar productos.json</button>
+              <button id="export-cat-btn" class="btn btn-outline btn-sm">Descargar catalogos.json</button>
+              <button id="reset-data-btn" class="btn btn-danger btn-sm">Restablecer Ejemplos</button>
+            </div>
+          </div>
+
+          <p style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:1rem;">
+            Los cambios se guardan al instante en este navegador para pruebas. Para publicarlos a todos tus clientes en GitHub Pages, descarga los JSON y súbelos a la carpeta <code>data/</code>.
+          </p>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Img</th>
+                  <th>Código</th>
+                  <th>Nombre</th>
+                  <th>Catálogo</th>
+                  <th>Precio</th>
+                  <th>Stock</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="admin-products-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
