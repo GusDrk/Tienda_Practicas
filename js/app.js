@@ -1,5 +1,7 @@
 const TELEFONO_TIENDA = "527716702732";
 
+const DATA_VERSION = "2026-11-26-v3";
+const VERSION_KEY = "decorarte_data_version";
 const CATALOGOS_KEY = "decorarte_catalogos";
 const PRODUCTOS_KEY = "decorarte_productos";
 const CARRITO_KEY = "decorarte_carrito";
@@ -33,6 +35,12 @@ const orderSummaryEl = document.getElementById("order-summary");
 const whatsappOrderLink = document.getElementById("whatsapp-order-link");
 
 async function cargarDatos() {
+  if (localStorage.getItem(VERSION_KEY) !== DATA_VERSION) {
+    localStorage.removeItem(CATALOGOS_KEY);
+    localStorage.removeItem(PRODUCTOS_KEY);
+    localStorage.setItem(VERSION_KEY, DATA_VERSION);
+  }
+
   const catGuardados = localStorage.getItem(CATALOGOS_KEY);
   const prodGuardados = localStorage.getItem(PRODUCTOS_KEY);
 
@@ -40,7 +48,7 @@ async function cargarDatos() {
     catalogos = JSON.parse(catGuardados);
   } else {
     try {
-      const res = await fetch("data/catalogos.json");
+      const res = await fetch(`data/catalogos.json?v=${DATA_VERSION}`);
       catalogos = await res.json();
     } catch {
       catalogos = [];
@@ -51,7 +59,7 @@ async function cargarDatos() {
     productos = JSON.parse(prodGuardados);
   } else {
     try {
-      const res = await fetch("data/productos.json");
+      const res = await fetch(`data/productos.json?v=${DATA_VERSION}`);
       productos = await res.json();
     } catch {
       productos = [];
@@ -155,7 +163,7 @@ function crearTarjetaProducto(p) {
             ${p.en_oferta && p.precio_anterior ? `<span class="price-old">${formatearPrecio(p.precio_anterior)}</span>` : ""}
             <span class="product-price">${formatearPrecio(p.precio)}</span>
           </div>
-          <button class="add-btn" onclick="agregarAlCarrito(${p.id})" ${agotado ? "disabled" : ""}>
+          <button class="add-btn" onclick="agregarAlCarrito(${p.id}, this)" ${agotado ? "disabled" : ""}>
             ${agotado ? "Sin stock" : "Agregar"}
           </button>
         </div>
@@ -236,7 +244,7 @@ function guardarCarrito() {
   localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
 }
 
-function agregarAlCarrito(id) {
+function agregarAlCarrito(id, btnEl) {
   const prod = productos.find((p) => p.id === id);
   if (!prod || Number(prod.cantidad) <= 0) return;
   const existente = carrito.find((item) => item.id === id);
@@ -251,7 +259,16 @@ function agregarAlCarrito(id) {
   }
   guardarCarrito();
   renderCarrito();
-  abrirCarrito();
+
+  if (btnEl) {
+    const textoOriginal = btnEl.textContent;
+    btnEl.textContent = "✓ Agregado";
+    btnEl.disabled = true;
+    setTimeout(() => {
+      btnEl.textContent = textoOriginal;
+      btnEl.disabled = false;
+    }, 900);
+  }
 }
 
 function cambiarCantidad(id, delta) {

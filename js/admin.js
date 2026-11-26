@@ -1,5 +1,7 @@
 const ADMIN_USER = "Admin";
 const ADMIN_PASS = "12345";
+const DATA_VERSION = "2026-11-26-v3";
+const VERSION_KEY = "decorarte_data_version";
 const CATALOGOS_KEY = "decorarte_catalogos";
 const PRODUCTOS_KEY = "decorarte_productos";
 
@@ -60,13 +62,19 @@ logoutBtn.addEventListener("click", () => {
 });
 
 async function cargarDatos() {
+  if (localStorage.getItem(VERSION_KEY) !== DATA_VERSION) {
+    localStorage.removeItem(CATALOGOS_KEY);
+    localStorage.removeItem(PRODUCTOS_KEY);
+    localStorage.setItem(VERSION_KEY, DATA_VERSION);
+  }
+
   const catGuardados = localStorage.getItem(CATALOGOS_KEY);
   const prodGuardados = localStorage.getItem(PRODUCTOS_KEY);
 
   if (catGuardados) {
     catalogos = JSON.parse(catGuardados);
   } else {
-    const res = await fetch("data/catalogos.json");
+    const res = await fetch(`data/catalogos.json?v=${DATA_VERSION}`);
     catalogos = await res.json();
     localStorage.setItem(CATALOGOS_KEY, JSON.stringify(catalogos));
   }
@@ -74,7 +82,7 @@ async function cargarDatos() {
   if (prodGuardados) {
     productos = JSON.parse(prodGuardados);
   } else {
-    const res = await fetch("data/productos.json");
+    const res = await fetch(`data/productos.json?v=${DATA_VERSION}`);
     productos = await res.json();
     localStorage.setItem(PRODUCTOS_KEY, JSON.stringify(productos));
   }
@@ -85,6 +93,7 @@ async function cargarDatos() {
 }
 
 function guardarTodo() {
+  localStorage.setItem(VERSION_KEY, DATA_VERSION);
   localStorage.setItem(CATALOGOS_KEY, JSON.stringify(catalogos));
   localStorage.setItem(PRODUCTOS_KEY, JSON.stringify(productos));
   actualizarKPIs();
