@@ -1,4 +1,5 @@
-const ADMIN_PASS = "decorarte2026";
+const ADMIN_USER = "Admin";
+const ADMIN_PASS = "12345";
 const CATALOGOS_KEY = "decorarte_catalogos";
 const PRODUCTOS_KEY = "decorarte_productos";
 
@@ -35,12 +36,13 @@ function verificarSesion() {
 
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
+  const user = document.getElementById("admin-user").value.trim();
   const pass = document.getElementById("admin-pass").value;
-  if (pass === ADMIN_PASS) {
+  if (user === ADMIN_USER && pass === ADMIN_PASS) {
     sessionStorage.setItem("decorarte_admin_auth", "true");
     verificarSesion();
   } else {
-    alert("Contraseña incorrecta.");
+    alert("Usuario o contraseña incorrectos.");
   }
 });
 

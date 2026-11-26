@@ -26,14 +26,18 @@
       <span class="eyebrow">Panel Privado</span>
       <h2>Acceso de Administración</h2>
       <p style="font-size:0.84rem;color:var(--texto-suave);margin-bottom:1rem;">
-        Ingresa la clave de administrador (por defecto: <strong>decorarte2026</strong>).
+        Inicia sesión con tu cuenta de administrador.
       </p>
       <form id="login-form">
         <label class="field-label">
-          Contraseña
-          <input type="password" id="admin-pass" required placeholder="Ingresa la clave" />
+          Usuario
+          <input type="text" id="admin-user" required placeholder="Usuario" autocomplete="username" />
         </label>
-        <button type="submit" class="btn btn-primary btn-full">Entrar al Panel</button>
+        <label class="field-label">
+          Contraseña
+          <input type="password" id="admin-pass" required placeholder="Contraseña" autocomplete="current-password" />
+        </label>
+        <button type="submit" class="btn btn-primary btn-full">Iniciar Sesión</button>
       </form>
     </div>
   </section>
