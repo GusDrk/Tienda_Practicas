@@ -6,6 +6,8 @@ const PRODUCTOS_KEY = "decorarte_productos";
 let catalogos = [];
 let productos = [];
 let imagenBase64 = "";
+let busquedaAdmin = "";
+let filtroCatAdmin = "todos";
 
 const loginSection = document.getElementById("admin-login");
 const adminPanel = document.getElementById("admin-panel");
@@ -25,6 +27,12 @@ const imgPreview = document.getElementById("img-preview");
 const catalogForm = document.getElementById("catalog-form");
 const catalogsList = document.getElementById("catalogs-list");
 const productsBody = document.getElementById("admin-products-body");
+
+const searchForm = document.getElementById("admin-search-form");
+const searchInput = document.getElementById("admin-search-input");
+const filterCatSelect = document.getElementById("admin-filter-cat");
+const clearSearchBtn = document.getElementById("admin-clear-search");
+const resultCountEl = document.getElementById("admin-result-count");
 
 function verificarSesion() {
   const autenticado = sessionStorage.getItem("decorarte_admin_auth") === "true";
@@ -73,17 +81,32 @@ async function cargarDatos() {
 
   renderCatalogos();
   renderProductos();
+  actualizarKPIs();
 }
 
 function guardarTodo() {
   localStorage.setItem(CATALOGOS_KEY, JSON.stringify(catalogos));
   localStorage.setItem(PRODUCTOS_KEY, JSON.stringify(productos));
+  actualizarKPIs();
+}
+
+function actualizarKPIs() {
+  document.getElementById("kpi-total").textContent = productos.length;
+  document.getElementById("kpi-ofertas").textContent = productos.filter((p) => p.en_oferta).length;
+  document.getElementById("kpi-catalogos").textContent = catalogos.filter((c) => c.habilitado !== false).length;
+  document.getElementById("kpi-bajo").textContent = productos.filter((p) => Number(p.cantidad) <= 3).length;
 }
 
 function renderCatalogos() {
   prodCategoriaSelect.innerHTML = catalogos
     .map((c) => `<option value="${c.slug}">${c.nombre}${c.habilitado ? "" : " (Deshabilitado)"}</option>`)
     .join("");
+
+  const catAnterior = filterCatSelect.value || "todos";
+  filterCatSelect.innerHTML =
+    `<option value="todos">Todos los catálogos</option>` +
+    catalogos.map((c) => `<option value="${c.slug}">${c.nombre}</option>`).join("");
+  filterCatSelect.value = catAnterior;
 
   actualizarSugerenciasSubcat();
 
@@ -283,24 +306,74 @@ function limpiarFormularioProducto() {
 
 cancelEditBtn.addEventListener("click", limpiarFormularioProducto);
 
+searchForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  busquedaAdmin = searchInput.value.trim().toLowerCase();
+  filtroCatAdmin = filterCatSelect.value;
+  renderProductos();
+});
+
+searchInput.addEventListener("input", (e) => {
+  busquedaAdmin = e.target.value.trim().toLowerCase();
+  renderProductos();
+});
+
+filterCatSelect.addEventListener("change", (e) => {
+  filtroCatAdmin = e.target.value;
+  renderProductos();
+});
+
+clearSearchBtn.addEventListener("click", () => {
+  searchInput.value = "";
+  filterCatSelect.value = "todos";
+  busquedaAdmin = "";
+  filtroCatAdmin = "todos";
+  renderProductos();
+});
+
 function renderProductos() {
-  productsBody.innerHTML = productos
+  const filtrados = productos.filter((p) => {
+    const coincideCat = filtroCatAdmin === "todos" || p.categoria === filtroCatAdmin;
+    const coincideTexto =
+      !busquedaAdmin ||
+      p.nombre.toLowerCase().includes(busquedaAdmin) ||
+      (p.codigo || "").toLowerCase().includes(busquedaAdmin) ||
+      (p.subcategoria || "").toLowerCase().includes(busquedaAdmin) ||
+      (p.descripcion || "").toLowerCase().includes(busquedaAdmin);
+    return coincideCat && coincideTexto;
+  });
+
+  resultCountEl.textContent = `${filtrados.length} artículo${filtrados.length === 1 ? "" : "s"}`;
+
+  if (filtrados.length === 0) {
+    productsBody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--texto-suave);padding:1.5rem;">No se encontraron productos con ese criterio.</td></tr>`;
+    return;
+  }
+
+  productsBody.innerHTML = filtrados
     .map(
       (p) => `
       <tr>
-        <td><img src="${p.imagen}" class="admin-thumb" alt="${p.nombre}" /></td>
-        <td><code>${p.codigo || "-"}</code></td>
+        <td><img src="${p.imagen}" class="admin-thumb" alt="${p.nombre}" loading="lazy" /></td>
+        <td><code class="admin-sku-code">${p.codigo || "-"}</code></td>
         <td>
-          <strong>${p.nombre}</strong>
-          ${p.en_oferta ? '<br><small style="color:var(--oferta);font-weight:600;">En oferta</small>' : ""}
+          <div class="admin-prod-name">${p.nombre}</div>
+          ${p.en_oferta ? '<span class="admin-offer-pill">Oferta</span>' : ""}
         </td>
-        <td>${p.categoria}${p.subcategoria ? `<br><small>${p.subcategoria}</small>` : ""}</td>
-        <td>$${Number(p.precio).toLocaleString("es-MX")}</td>
-        <td>${p.cantidad}</td>
         <td>
-          <div style="display:flex;gap:0.35rem;">
-            <button class="btn btn-outline btn-sm" onclick="editarProducto(${p.id})">Editar</button>
-            <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${p.id})">Eliminar</button>
+          <span class="admin-cat-text">${p.categoria}</span>
+          ${p.subcategoria ? `<div class="admin-subcat-text">${p.subcategoria}</div>` : ""}
+        </td>
+        <td><strong>$${Number(p.precio).toLocaleString("es-MX")}</strong></td>
+        <td>
+          <span class="status-pill ${Number(p.cantidad) <= 3 ? "status-off" : "status-on"}">
+            ${p.cantidad}
+          </span>
+        </td>
+        <td>
+          <div class="admin-row-actions">
+            <button class="btn btn-outline btn-xs" onclick="editarProducto(${p.id})">Editar</button>
+            <button class="btn btn-danger btn-xs" onclick="eliminarProducto(${p.id})">Borrar</button>
           </div>
         </td>
       </tr>

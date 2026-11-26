@@ -3,30 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DecorArte | Administración de Tienda</title>
+  <title>DecorArte | Panel de Administración</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
   <header class="navbar">
     <div class="container nav-content">
-      <a href="index.html" class="logo">Decor<span>Arte</span> · Admin</a>
-      <div style="display:flex;gap:0.8rem;align-items:center;">
-        <a href="index.html" class="btn btn-outline btn-sm">Ver Tienda</a>
-        <button id="logout-btn" class="btn btn-outline btn-sm hidden">Cerrar Sesión</button>
+      <a href="index.html" class="logo">Decor<span>Arte</span> <small class="admin-badge-header">Admin</small></a>
+      <div class="admin-header-actions">
+        <a href="index.html" class="btn btn-outline btn-sm">Ver Tienda Pública</a>
+        <button id="logout-btn" class="btn btn-primary btn-sm hidden">Cerrar Sesión</button>
       </div>
     </div>
   </header>
 
   <!-- Pantalla de acceso -->
-  <section id="admin-login" class="container" style="max-width:420px;margin:4rem auto;">
-    <div class="admin-card">
+  <section id="admin-login" class="admin-login-wrap">
+    <div class="admin-card admin-login-card">
       <span class="eyebrow">Panel Privado</span>
       <h2>Acceso de Administración</h2>
-      <p style="font-size:0.84rem;color:var(--texto-suave);margin-bottom:1rem;">
-        Inicia sesión con tu cuenta de administrador.
+      <p class="admin-subtitle">
+        Inicia sesión con tu cuenta de administrador para gestionar productos y catálogos.
       </p>
       <form id="login-form">
         <label class="field-label">
@@ -44,6 +44,38 @@
 
   <!-- Panel principal -->
   <main id="admin-panel" class="container admin-main hidden">
+    <!-- Encabezado y Métricas -->
+    <div class="admin-hero-bar">
+      <div>
+        <span class="eyebrow">Gestión DecorArte</span>
+        <h1>Panel de Inventario y Catálogos</h1>
+      </div>
+      <div class="admin-export-actions">
+        <button id="export-prod-btn" class="btn btn-outline btn-sm">Descargar productos.json</button>
+        <button id="export-cat-btn" class="btn btn-outline btn-sm">Descargar catalogos.json</button>
+        <button id="reset-data-btn" class="btn btn-danger btn-sm">Restablecer Ejemplos</button>
+      </div>
+    </div>
+
+    <div class="admin-kpis" id="admin-kpis">
+      <div class="kpi-card">
+        <span class="kpi-label">Productos Totales</span>
+        <strong id="kpi-total">0</strong>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">En Oferta</span>
+        <strong id="kpi-ofertas">0</strong>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Catálogos Activos</span>
+        <strong id="kpi-catalogos">0</strong>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-label">Stock Bajo (&le; 3)</span>
+        <strong id="kpi-bajo">0</strong>
+      </div>
+    </div>
+
     <div class="admin-grid">
       <!-- Columna izquierda: Formularios -->
       <div>
@@ -54,10 +86,16 @@
           <form id="product-form">
             <input type="hidden" id="prod-id" />
 
-            <label class="field-label">
-              Código del producto (SKU) *
-              <input type="text" id="prod-codigo" required placeholder="Ej. DA-NAV-009" />
-            </label>
+            <div class="admin-two-col">
+              <label class="field-label">
+                Código (SKU) *
+                <input type="text" id="prod-codigo" required placeholder="Ej. DA-NAV-009" />
+              </label>
+              <label class="field-label">
+                Cantidad (Stock) *
+                <input type="number" id="prod-cantidad" min="0" required placeholder="0" />
+              </label>
+            </div>
 
             <label class="field-label">
               Nombre del producto *
@@ -69,7 +107,7 @@
               <textarea id="prod-descripcion" rows="2" required placeholder="Descripción breve y elegante..."></textarea>
             </label>
 
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+            <div class="admin-two-col">
               <label class="field-label">
                 Catálogo *
                 <select id="prod-categoria" required></select>
@@ -81,23 +119,19 @@
               </label>
             </div>
 
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;">
+            <div class="admin-two-col">
               <label class="field-label">
                 Precio (MXN) *
                 <input type="number" id="prod-precio" min="1" step="0.01" required />
               </label>
               <label class="field-label">
-                Precio anterior
+                Precio anterior (si es oferta)
                 <input type="number" id="prod-precio-anterior" min="0" step="0.01" placeholder="Opcional" />
-              </label>
-              <label class="field-label">
-                Cantidad (Stock) *
-                <input type="number" id="prod-cantidad" min="0" required />
               </label>
             </div>
 
-            <label class="field-label" style="display:flex;align-items:center;gap:0.5rem;">
-              <input type="checkbox" id="prod-oferta" style="width:auto;margin:0;" />
+            <label class="admin-check-label">
+              <input type="checkbox" id="prod-oferta" />
               <span>Mostrar en apartado de Ofertas</span>
             </label>
 
@@ -111,13 +145,14 @@
               <input type="file" id="prod-imagen-file" accept="image/*" />
             </label>
 
-            <div id="img-preview-wrap" class="hidden" style="margin-bottom:0.8rem;">
-              <img id="img-preview" class="admin-thumb" style="width:90px;height:90px;" alt="Vista previa" />
+            <div id="img-preview-wrap" class="hidden admin-preview-wrap">
+              <img id="img-preview" class="admin-preview-img" alt="Vista previa" />
+              <span class="admin-preview-note">Vista previa</span>
             </div>
 
-            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+            <div class="admin-form-actions">
               <button type="submit" class="btn btn-primary">Guardar Producto</button>
-              <button type="button" id="cancel-edit-btn" class="btn btn-outline hidden">Cancelar Edición</button>
+              <button type="button" id="cancel-edit-btn" class="btn btn-outline hidden">Cancelar</button>
             </div>
           </form>
         </div>
@@ -126,7 +161,7 @@
         <div class="admin-card">
           <span class="eyebrow">Temporadas y Secciones</span>
           <h3>Administrar Catálogos</h3>
-          <form id="catalog-form" style="margin-bottom:1.2rem;">
+          <form id="catalog-form" class="admin-catalog-form">
             <label class="field-label">
               Nuevo catálogo *
               <input type="text" id="cat-nombre" required placeholder="Ej. San Valentín, Primavera..." />
@@ -135,36 +170,45 @@
               Subcategorías internas (separadas por coma, opcional)
               <input type="text" id="cat-subcats" placeholder="Ej. Velas, Corazones, Centros de mesa" />
             </label>
-            <label class="field-label" style="display:flex;align-items:center;gap:0.5rem;">
-              <input type="checkbox" id="cat-temporada" style="width:auto;margin:0;" />
+            <label class="admin-check-label">
+              <input type="checkbox" id="cat-temporada" />
               <span>Es catálogo de temporada</span>
             </label>
             <button type="submit" class="btn btn-primary btn-sm">Crear Catálogo</button>
           </form>
 
-          <div id="catalogs-list">
-            <!-- Lista de catálogos para habilitar / deshabilitar -->
-          </div>
+          <div id="catalogs-list"></div>
         </div>
       </div>
 
-      <!-- Columna derecha: Tabla de Productos y Respaldo -->
+      <!-- Columna derecha: Buscador y Lista Compacta de Productos -->
       <div>
         <div class="admin-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.8rem;margin-bottom:1rem;">
+          <div class="admin-list-header">
             <div>
               <span class="eyebrow">Base de Datos Local</span>
-              <h2 style="margin:0;">Productos Registrados</h2>
+              <h2>Productos Registrados</h2>
             </div>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-              <button id="export-prod-btn" class="btn btn-outline btn-sm">Descargar productos.json</button>
-              <button id="export-cat-btn" class="btn btn-outline btn-sm">Descargar catalogos.json</button>
-              <button id="reset-data-btn" class="btn btn-danger btn-sm">Restablecer Ejemplos</button>
-            </div>
+            <span id="admin-result-count" class="admin-count-pill">0 artículos</span>
           </div>
 
-          <p style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:1rem;">
-            Los cambios se guardan al instante en este navegador para pruebas. Para publicarlos a todos tus clientes en GitHub Pages, descarga los JSON y súbelos a la carpeta <code>data/</code>.
+          <!-- Barra de búsqueda con botón -->
+          <form id="admin-search-form" class="admin-search-bar">
+            <input
+              type="search"
+              id="admin-search-input"
+              class="search-input admin-search-input"
+              placeholder="Buscar por nombre, código o subcategoría..."
+            />
+            <select id="admin-filter-cat" class="admin-filter-select">
+              <option value="todos">Todos los catálogos</option>
+            </select>
+            <button type="submit" class="btn btn-primary btn-sm">Buscar</button>
+            <button type="button" id="admin-clear-search" class="btn btn-outline btn-sm">Limpiar</button>
+          </form>
+
+          <p class="admin-help-note">
+            Los cambios se guardan al instante en este navegador. Para publicarlos a todos tus clientes en GitHub Pages, descarga los JSON y súbelos a <code>data/</code>.
           </p>
 
           <div class="admin-table-wrap">
@@ -173,7 +217,7 @@
                 <tr>
                   <th>Img</th>
                   <th>Código</th>
-                  <th>Nombre</th>
+                  <th>Producto</th>
                   <th>Catálogo</th>
                   <th>Precio</th>
                   <th>Stock</th>
